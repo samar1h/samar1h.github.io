@@ -188,6 +188,17 @@
                 clearTimeout(longPressTimeout);
                 spawnRandomImage();
             });
+            h1.addEventListener('touchstart', (event) => {
+                event.preventDefault(); // Prevent default touch behavior
+                longPressTimeout = setTimeout(() => {
+                openSettingsMenu();
+            }, 1000);
+            });
+
+h1.addEventListener('touchend', () => {
+    clearTimeout(longPressTimeout);
+    spawnRandomImage();
+});
 
             function openSettingsMenu() {
                 settingsMenu.style.display = 'block';
