@@ -38,7 +38,12 @@
       const h1 = document.querySelector('h1');
       const body = document.body;
 
-      const imageSources = {
+      window.randomImageSources = {
+        //placeholder: 'http://via.placeholder.com',
+        //loremflickr: 'https://loremflickr.com',
+        //lorempicsum: 'https://picsum.photos',
+        //beard: 'https://placebeard.it',
+        //bacon: 'https://baconmockup.com',
         //zombie: 'https://placezombie.com',
         //bear: 'https://placebear.com',
         kitten: 'https://placekitten.com',
@@ -47,10 +52,10 @@
 
       h1.addEventListener('click', () => {
         const randomImage = new Image();
-        const randomAnimal = getRandomAnimal(imageSources);
+        const randomSite = getRandomSite(imageSources);
         const imageSize = Math.floor(Math.random() * 100) + 100;
 
-        randomImage.src = `${imageSources[randomAnimal]}/${imageSize}/${imageSize}`;
+        randomImage.src = `${window.randomImageSources[randomSite]}/${imageSize}/${imageSize}`;
         randomImage.classList.add('random-image');
 
         positionImage(randomImage, imageSize);
@@ -61,7 +66,7 @@
         body.appendChild(randomImage);
       });
 
-      function getRandomAnimal(sources) {
+      function getRandomSite(sources) {
         const keys = Object.keys(sources);
         return keys[Math.floor(Math.random() * keys.length)];
       }
