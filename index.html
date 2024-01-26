@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
-  <style>
+ <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
+ <style>
     h1 {
       text-align: center;
       color: white;
@@ -27,13 +27,13 @@
       -webkit-user-drag: none;
       border: 2px solid white; /* Add a white border to every random image */
     }
-  </style>
+ </style>
 </head>
 
 <body>
-  <h1><b>Hello World!</b></h1>
+ <h1><b>Hello World!</b></h1>
 
-  <script>
+ <script>
     document.addEventListener('DOMContentLoaded', function () {
       const h1 = document.querySelector('h1');
       const body = document.body;
@@ -55,6 +55,7 @@
 
         randomImage.addEventListener('dragstart', (e) => e.preventDefault());
         randomImage.addEventListener('mousedown', (e) => handleMouseDown(e, randomImage));
+        randomImage.addEventListener('touchstart', (e) => handleTouchStart(e, randomImage));
 
         body.appendChild(randomImage);
       });
@@ -86,30 +87,28 @@
 
         document.addEventListener('mousemove', dragMove);
         document.addEventListener('mouseup', dragEnd);
+      }
 
-        // Use touchstart to initiate touch drag
-        image.addEventListener('touchstart', (touchStartEvent) => {
-          const touch = touchStartEvent.touches[0];
-          offsetX = touch.clientX - image.getBoundingClientRect().left;
-          offsetY = touch.clientY - image.getBoundingClientRect().top;
+      function handleTouchStart(event, image) {
+        event.preventDefault();
+        const offsetX = event.changedTouches[0].clientX - image.getBoundingClientRect().left;
+        const offsetY = event.changedTouches[0].clientY - image.getBoundingClientRect().top;
 
-          function touchMove(touchMoveEvent) {
-            const touch = touchMoveEvent.touches[0];
-            image.style.left = touch.clientX - offsetX + 'px';
-            image.style.top = touch.clientY - offsetY + 'px';
-          }
+        function dragMove(moveEvent) {
+          image.style.left = moveEvent.changedTouches[0].clientX - offsetX + 'px';
+          image.style.top = moveEvent.changedTouches[0].clientY - offsetY + 'px';
+        }
 
-          function touchEnd() {
-            document.removeEventListener('touchmove', touchMove);
-            document.removeEventListener('touchend', touchEnd);
-          }
+        function dragEnd() {
+          document.removeEventListener('touchmove', dragMove);
+          document.removeEventListener('touchend', dragEnd);
+        }
 
-          document.addEventListener('touchmove', touchMove);
-          document.addEventListener('touchend', touchEnd);
-        });
+        document.addEventListener('touchmove', dragMove);
+        document.addEventListener('touchend', dragEnd);
       }
     });
-  </script>
+ </script>
 </body>
 
 </html>
