@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
@@ -7,11 +8,12 @@
       text-align: center;
       color: white;
       display: table-cell;
-      position: relative; /* Set the position to relative to make it a positioning context */
+      position: relative;
+      user-select: none;
     }
 
     body {
-      background-color: black; /* Set the background color to black */
+      background-color: black;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -23,43 +25,59 @@
       position: absolute;
       user-drag: none;
       -webkit-user-drag: none;
+      border: 2px solid white; /* Add a white border to every random image */
     }
   </style>
 </head>
 
 <body>
-  <h1><b>Hello World</b></h1>
+  <h1><b>Hello World!</b></h1>
 
   <script>
-    const h1 = document.querySelector('h1');
-    const body = document.body;
+    document.addEventListener('DOMContentLoaded', function () {
+      const h1 = document.querySelector('h1');
+      const body = document.body;
 
-    h1.addEventListener('click', () => {
-      const randomImage = new Image();
-      const randomAnimal = Math.random() < 0.5 ? 'cat' : 'dog';
-      const imageSize = Math.floor(Math.random() * 100) + 100; // Random size between 100 and 200
-      randomImage.src = `https://placekitten.com/${imageSize}/${imageSize}`;
-      if (randomAnimal === 'dog') {
-        randomImage.src = `https://placedog.net/${imageSize}/${imageSize}`;
+      const imageSources = {
+        bear: 'https://placebear.com',
+        kitten: 'https://placekitten.com',
+        dog: 'https://placedog.net'
+      };
+
+      h1.addEventListener('click', () => {
+        const randomImage = new Image();
+        const randomAnimal = getRandomAnimal(imageSources);
+        const imageSize = Math.floor(Math.random() * 100) + 100;
+
+        randomImage.src = `${imageSources[randomAnimal]}/${imageSize}/${imageSize}`;
+        randomImage.classList.add('random-image');
+
+        positionImage(randomImage, imageSize);
+
+        randomImage.addEventListener('dragstart', (e) => e.preventDefault());
+        randomImage.addEventListener('mousedown', (e) => handleMouseDown(e, randomImage));
+
+        body.appendChild(randomImage);
+      });
+
+      function getRandomAnimal(sources) {
+        const keys = Object.keys(sources);
+        return keys[Math.floor(Math.random() * keys.length)];
       }
 
-      randomImage.classList.add('random-image');
+      function positionImage(image, size) {
+        image.style.left = `${Math.random() * (window.innerWidth - size)}px`;
+        image.style.top = `${Math.random() * (window.innerHeight - size)}px`;
+      }
 
-      // Position the image without overlapping the text
-      randomImage.style.left = `${Math.random() * (window.innerWidth - imageSize)}px`;
-      randomImage.style.top = `${Math.random() * (window.innerHeight - imageSize)}px`;
-      
-
-      randomImage.addEventListener('dragstart', (e) => e.preventDefault());
-
-      // Make every spawned image draggable
-      randomImage.addEventListener('mousedown', (e) => {
-        let offsetX = e.clientX - randomImage.getBoundingClientRect().left;
-        let offsetY = e.clientY - randomImage.getBoundingClientRect().top;
+      function handleMouseDown(event, image) {
+        event.preventDefault();
+        const offsetX = event.clientX - image.getBoundingClientRect().left;
+        const offsetY = event.clientY - image.getBoundingClientRect().top;
 
         function dragMove(moveEvent) {
-          randomImage.style.left = moveEvent.clientX - offsetX + 'px';
-          randomImage.style.top = moveEvent.clientY - offsetY + 'px';
+          image.style.left = moveEvent.clientX - offsetX + 'px';
+          image.style.top = moveEvent.clientY - offsetY + 'px';
         }
 
         function dragEnd() {
@@ -69,11 +87,8 @@
 
         document.addEventListener('mousemove', dragMove);
         document.addEventListener('mouseup', dragEnd);
-      });
-
-      body.appendChild(randomImage);
+      }
     });
-    }
   </script>
 </body>
 
