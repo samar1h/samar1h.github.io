@@ -52,7 +52,7 @@
 
       h1.addEventListener('click', () => {
         const randomImage = new Image();
-        const randomSite = getRandomSite(imageSources);
+        const randomSite = getRandomSite(window.randomImageSources);
         const imageSize = Math.floor(Math.random() * 100) + 100;
 
         randomImage.src = `${window.randomImageSources[randomSite]}/${imageSize}/${imageSize}`;
