@@ -27,23 +27,115 @@
       -webkit-user-drag: none;
       border: 2px solid white; /* Add a white border to every random image */
     }
+
+    #settings-menu {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    #settings-menu label {
+      display: block;
+      margin-bottom: 10px;
+    }
  </style>
 </head>
 
 <body>
- <h1><b>Hello World!</b></h1>
+ <h1 id="hello-world"><b>Hello World!</b></h1>
+ <div id="settings-menu">
+   <label>
+     <input type="checkbox" id="kittenCheckbox" checked>
+     Enable Kitten Images
+   </label>
+   <label>
+     <input type="checkbox" id="dogCheckbox" checked>
+     Enable Dog Images
+   </label>
+   <label>
+     Add Image Source (URL):
+     <input type="url" id="newSourceInput" placeholder="Enter URL" required>
+   </label>
+   <button onclick="addNewSource()">Add Source</button>
+   <button onclick="clearAllImages()">Clear All Images</button>
+   <button onclick="shuffleImages()">Shuffle Images</button>
+   <button onclick="closeSettingsMenu()">Close Menu</button>
+ </div>
 
  <script>
+    const settingsMenu = document.getElementById('settings-menu');
+
+    const openSettingsMenu = () => {
+        settingsMenu.style.display = 'block';
+    };
+
+    const closeSettingsMenu = () => {
+        settingsMenu.style.display = 'none';
+    };
+
+    const addNewSource = () => {
+        const newSourceInput = document.getElementById('newSourceInput');
+        const newSource = newSourceInput.value.trim();
+        if (newSource !== '') {
+            window.randomImageSources[newSource] = newSource;
+            newSourceInput.value = '';
+        }
+    };
+
+    const clearAllImages = () => {
+        const images = document.querySelectorAll('.random-image');
+        images.forEach((image) => image.remove());
+    };
+
+    const shuffleImages = () => {
+    const images = document.querySelectorAll('.random-image');
+
+    images.forEach((image) => {
+        const imageSize = parseInt(image.width, 10);
+        image.style.left = `${Math.random() * (window.innerWidth - imageSize)}px`;
+        image.style.top = `${Math.random() * (window.innerHeight - imageSize)}px`;
+    });
+};
+
     document.addEventListener('DOMContentLoaded', function () {
-      const h1 = document.querySelector('h1');
+      const h1 = document.querySelector('#hello-world');
       const body = document.body;
+      const kittenCheckbox = document.getElementById('kittenCheckbox');
+      const dogCheckbox = document.getElementById('dogCheckbox');
 
       window.randomImageSources = {
         kitten: 'https://placekitten.com',
         dog: 'https://placedog.net'
       };
 
-      h1.addEventListener('click', () => {
+      let longPressTimeout;
+
+      h1.addEventListener('mousedown', () => {
+        longPressTimeout = setTimeout(() => {
+          openSettingsMenu();
+        }, 1000);
+      });
+
+      h1.addEventListener('mouseup', () => {
+        clearTimeout(longPressTimeout);
+        spawnRandomImage();
+      });
+
+      function openSettingsMenu() {
+        settingsMenu.style.display = 'block';
+      }
+
+      function closeSettingsMenu() {
+        settingsMenu.style.display = 'none';
+      }
+
+      function spawnRandomImage() {
         const randomImage = new Image();
         const randomSite = getRandomSite(window.randomImageSources);
         const imageSize = Math.floor(Math.random() * 100) + 100;
@@ -58,7 +150,7 @@
         randomImage.addEventListener('touchstart', (e) => handleTouchStart(e, randomImage));
 
         body.appendChild(randomImage);
-      });
+      }
 
       function getRandomSite(sources) {
         const keys = Object.keys(sources);
@@ -107,6 +199,14 @@
         document.addEventListener('touchmove', dragMove);
         document.addEventListener('touchend', dragEnd);
       }
+
+      kittenCheckbox.addEventListener('change', () => {
+        window.randomImageSources.kitten = kittenCheckbox.checked ? 'https://placekitten.com' : '';
+      });
+
+      dogCheckbox.addEventListener('change', () => {
+        window.randomImageSources.dog = dogCheckbox.checked ? 'https://placedog.net' : '';
+      });
     });
  </script>
 </body>
