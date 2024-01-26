@@ -181,7 +181,7 @@
             h1.addEventListener('mousedown', () => {
                 longPressTimeout = setTimeout(() => {
                     openSettingsMenu();
-                }, 1000);
+                }, 2000);
             });
 
             h1.addEventListener('mouseup', () => {
@@ -192,7 +192,7 @@
                 event.preventDefault(); // Prevent default touch behavior
                 longPressTimeout = setTimeout(() => {
                 openSettingsMenu();
-            }, 1000);
+            }, 2000);
             });
 
 h1.addEventListener('touchend', () => {
