@@ -2,213 +2,218 @@
 <html lang="en">
 
 <head>
- <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
- <style>
-    h1 {
-      text-align: center;
-      color: white;
-      display: table-cell;
-      position: relative;
-      user-select: none;
-    }
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
+    <style>
+        h1 {
+            text-align: center;
+            color: white;
+            display: table-cell;
+            position: relative;
+            user-select: none;
+        }
 
-    body {
-      background-color: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
+        body {
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-    .random-image {
-      position: absolute;
-      user-drag: none;
-      -webkit-user-drag: none;
-      border: 2px solid white; /* Add a white border to every random image */
-    }
+        .random-image {
+            position: absolute;
+            user-drag: none;
+            -webkit-user-drag: none;
+            border: 2px solid white; /* Add a white border to every random image */
+        }
 
-    #settings-menu {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 20px;
-      z-index: 100;
-    }
+        #settings-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            z-index: 999;
+        }
 
-    #settings-menu label {
-      display: block;
-      margin-bottom: 10px;
-    }
- </style>
+        #settings-menu label {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 
 <body>
- <h1 id="hello-world"><b>Hello World!</b></h1>
- <div id="settings-menu">
-   <label>
-     <input type="checkbox" id="kittenCheckbox" checked>
-     Enable Kitten Images
-   </label>
-   <label>
-     <input type="checkbox" id="dogCheckbox" checked>
-     Enable Dog Images
-   </label>
-   <label>
-     Add Image Source (URL):
-     <input type="url" id="newSourceInput" placeholder="Enter URL" required>
-   </label>
-   <button onclick="addNewSource()">Add Source</button>
-   <button onclick="clearAllImages()">Clear All Images</button>
-   <button onclick="shuffleImages()">Shuffle Images</button>
-   <button onclick="closeSettingsMenu()">Close Menu</button>
- </div>
+    <h1 id="hello-world"><b>Hello World!</b></h1>
+    <div id="settings-menu">
+        <label>
+            <input type="checkbox" id="kittenCheckbox" checked>
+            Enable Kitten Images
+        </label>
+        <label>
+            <input type="checkbox" id="dogCheckbox" checked>
+            Enable Dog Images
+        </label>
+        <label>
+            Add Image Source (URL):
+            <input type="url" id="newSourceInput" placeholder="https://placebear.com" required>
+        </label>
+        <button onclick="addNewSource()">Add Source</button>
+        <button onclick="clearAllImages()">Clear All Images</button>
+        <button onclick="shuffleImages()">Shuffle Images</button>
+        <button onclick="closeSettingsMenu()">Close Menu</button>
+    </div>
 
- <script>
-    const settingsMenu = document.getElementById('settings-menu');
+    <script>
+        const settingsMenu = document.getElementById('settings-menu');
 
-    const openSettingsMenu = () => {
-        settingsMenu.style.display = 'block';
-    };
+        const openSettingsMenu = () => {
+            settingsMenu.style.display = 'block';
+        };
 
-    const closeSettingsMenu = () => {
-        settingsMenu.style.display = 'none';
-    };
+        const closeSettingsMenu = () => {
+            settingsMenu.style.display = 'none';
+        };
 
-    const addNewSource = () => {
-        const newSourceInput = document.getElementById('newSourceInput');
-        const newSource = newSourceInput.value.trim();
-        if (newSource !== '') {
-            window.randomImageSources[newSource] = newSource;
-            newSourceInput.value = '';
-        }
-    };
+        const addNewSource = () => {
+            const newSourceInput = document.getElementById('newSourceInput');
+            const newSource = newSourceInput.value.trim();
+            if (newSource !== '') {
+                window.randomImageSources[newSource] = newSource;
+                newSourceInput.value = '';
+            }
+        };
 
-    const clearAllImages = () => {
-        const images = document.querySelectorAll('.random-image');
-        images.forEach((image) => image.remove());
-    };
+        const clearAllImages = () => {
+            const images = document.querySelectorAll('.random-image');
+            images.forEach((image) => image.remove());
+        };
 
-    const shuffleImages = () => {
-    const images = document.querySelectorAll('.random-image');
+        const shuffleImages = () => {
+            const images = document.querySelectorAll('.random-image');
+            images.forEach((image) => {
+                const imageSize = parseInt(image.width, 10);
+                image.style.left = `${Math.random() * (window.innerWidth - imageSize)}px`;
+                image.style.top = `${Math.random() * (window.innerHeight - imageSize)}px`;
+            });
+        };
 
-    images.forEach((image) => {
-        const imageSize = parseInt(image.width, 10);
-        image.style.left = `${Math.random() * (window.innerWidth - imageSize)}px`;
-        image.style.top = `${Math.random() * (window.innerHeight - imageSize)}px`;
-    });
-};
+        const spawnRandomImage = () => {
+            const randomImage = new Image();
+            const imageSize = Math.floor(Math.random() * 100) + 100;
+            const randomSite = getRandomSite(window.randomImageSources);
+            randomImage.src = `${window.randomImageSources[randomSite]}/${imageSize}/${imageSize}`;
+            randomImage.classList.add('random-image');
+            positionImage(randomImage, imageSize);
 
-    document.addEventListener('DOMContentLoaded', function () {
-      const h1 = document.querySelector('#hello-world');
-      const body = document.body;
-      const kittenCheckbox = document.getElementById('kittenCheckbox');
-      const dogCheckbox = document.getElementById('dogCheckbox');
+            randomImage.addEventListener('dragstart', (e) => e.preventDefault());
+            randomImage.addEventListener('mousedown', (e) => handleMouseDown(e, randomImage));
+            randomImage.addEventListener('touchstart', (e) => handleTouchStart(e, randomImage));
 
-      window.randomImageSources = {
-        kitten: 'https://placekitten.com',
-        dog: 'https://placedog.net'
-      };
+            document.body.appendChild(randomImage);
+        };
 
-      let longPressTimeout;
+        const getRandomSite = (sources) => {
+            const keys = Object.keys(sources);
+            return keys[Math.floor(Math.random() * keys.length)];
+        };
 
-      h1.addEventListener('mousedown', () => {
-        longPressTimeout = setTimeout(() => {
-          openSettingsMenu();
-        }, 1000);
-      });
+        const positionImage = (image, size) => {
+            image.style.left = `${Math.random() * (window.innerWidth - size)}px`;
+            image.style.top = `${Math.random() * (window.innerHeight - size)}px`;
+        };
 
-      h1.addEventListener('mouseup', () => {
-        clearTimeout(longPressTimeout);
-        spawnRandomImage();
-      });
+        function handleMouseDown(event, image) {
+            event.preventDefault();
+            const offsetX = event.clientX - image.getBoundingClientRect().left;
+            const offsetY = event.clientY - image.getBoundingClientRect().top;
 
-      function openSettingsMenu() {
-        settingsMenu.style.display = 'block';
-      }
+            function dragMove(moveEvent) {
+                image.style.left = moveEvent.clientX - offsetX + 'px';
+                image.style.top = moveEvent.clientY - offsetY + 'px';
+            }
 
-      function closeSettingsMenu() {
-        settingsMenu.style.display = 'none';
-      }
+            function dragEnd() {
+                document.removeEventListener('mousemove', dragMove);
+                document.removeEventListener('mouseup', dragEnd);
+            }
 
-      function spawnRandomImage() {
-        const randomImage = new Image();
-        const randomSite = getRandomSite(window.randomImageSources);
-        const imageSize = Math.floor(Math.random() * 100) + 100;
-
-        randomImage.src = `${window.randomImageSources[randomSite]}/${imageSize}/${imageSize}`;
-        randomImage.classList.add('random-image');
-
-        positionImage(randomImage, imageSize);
-
-        randomImage.addEventListener('dragstart', (e) => e.preventDefault());
-        randomImage.addEventListener('mousedown', (e) => handleMouseDown(e, randomImage));
-        randomImage.addEventListener('touchstart', (e) => handleTouchStart(e, randomImage));
-
-        body.appendChild(randomImage);
-      }
-
-      function getRandomSite(sources) {
-        const keys = Object.keys(sources);
-        return keys[Math.floor(Math.random() * keys.length)];
-      }
-
-      function positionImage(image, size) {
-        image.style.left = `${Math.random() * (window.innerWidth - size)}px`;
-        image.style.top = `${Math.random() * (window.innerHeight - size)}px`;
-      }
-
-      function handleMouseDown(event, image) {
-        event.preventDefault();
-        const offsetX = event.clientX - image.getBoundingClientRect().left;
-        const offsetY = event.clientY - image.getBoundingClientRect().top;
-
-        function dragMove(moveEvent) {
-          image.style.left = moveEvent.clientX - offsetX + 'px';
-          image.style.top = moveEvent.clientY - offsetY + 'px';
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', dragEnd);
         }
 
-        function dragEnd() {
-          document.removeEventListener('mousemove', dragMove);
-          document.removeEventListener('mouseup', dragEnd);
+        function handleTouchStart(event, image) {
+            event.preventDefault();
+            const offsetX = event.changedTouches[0].clientX - image.getBoundingClientRect().left;
+            const offsetY = event.changedTouches[0].clientY - image.getBoundingClientRect().top;
+
+            function dragMove(moveEvent) {
+                image.style.left = moveEvent.changedTouches[0].clientX - offsetX + 'px';
+                image.style.top = moveEvent.changedTouches[0].clientY - offsetY + 'px';
+            }
+
+            function dragEnd() {
+                document.removeEventListener('touchmove', dragMove);
+                document.removeEventListener('touchend', dragEnd);
+            }
+
+            document.addEventListener('touchmove', dragMove);
+            document.addEventListener('touchend', dragEnd);
         }
 
-        document.addEventListener('mousemove', dragMove);
-        document.addEventListener('mouseup', dragEnd);
-      }
+        document.addEventListener('DOMContentLoaded', () => {
+            const h1 = document.querySelector('#hello-world');
+            const body = document.body;
+            const kittenCheckbox = document.getElementById('kittenCheckbox');
+            const dogCheckbox = document.getElementById('dogCheckbox');
 
-      function handleTouchStart(event, image) {
-        event.preventDefault();
-        const offsetX = event.changedTouches[0].clientX - image.getBoundingClientRect().left;
-        const offsetY = event.changedTouches[0].clientY - image.getBoundingClientRect().top;
+            window.randomImageSources = {
+                kitten: 'https://placekitten.com',
+                dog: 'https://placedog.net'
+            };
 
-        function dragMove(moveEvent) {
-          image.style.left = moveEvent.changedTouches[0].clientX - offsetX + 'px';
-          image.style.top = moveEvent.changedTouches[0].clientY - offsetY + 'px';
-        }
+            let longPressTimeout;
 
-        function dragEnd() {
-          document.removeEventListener('touchmove', dragMove);
-          document.removeEventListener('touchend', dragEnd);
-        }
+            h1.addEventListener('mousedown', () => {
+                longPressTimeout = setTimeout(() => {
+                    openSettingsMenu();
+                }, 1000);
+            });
 
-        document.addEventListener('touchmove', dragMove);
-        document.addEventListener('touchend', dragEnd);
-      }
+            h1.addEventListener('mouseup', () => {
+                clearTimeout(longPressTimeout);
+                spawnRandomImage();
+            });
 
-      kittenCheckbox.addEventListener('change', () => {
-        window.randomImageSources.kitten = kittenCheckbox.checked ? 'https://placekitten.com' : '';
-      });
+            function openSettingsMenu() {
+                settingsMenu.style.display = 'block';
+            }
 
-      dogCheckbox.addEventListener('change', () => {
-        window.randomImageSources.dog = dogCheckbox.checked ? 'https://placedog.net' : '';
-      });
-    });
- </script>
+            function closeSettingsMenu() {
+                settingsMenu.style.display = 'none';
+            }
+
+            kittenCheckbox.addEventListener('change', () => {
+                if (kittenCheckbox.checked) {
+                    window.randomImageSources.kitten = 'https://placekitten.com';
+                } else {
+                    delete window.randomImageSources.kitten;
+                }
+            });
+
+            dogCheckbox.addEventListener('change', () => {
+                if (dogCheckbox.checked) {
+                    window.randomImageSources.dog = 'https://placedog.net';
+                } else {
+                    delete window.randomImageSources.dog;
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
