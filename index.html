@@ -39,13 +39,6 @@
       const body = document.body;
 
       window.randomImageSources = {
-        //placeholder: 'http://via.placeholder.com',
-        //loremflickr: 'https://loremflickr.com',
-        //lorempicsum: 'https://picsum.photos',
-        //beard: 'https://placebeard.it',
-        //bacon: 'https://baconmockup.com',
-        //zombie: 'https://placezombie.com',
-        //bear: 'https://placebear.com',
         kitten: 'https://placekitten.com',
         dog: 'https://placedog.net'
       };
@@ -80,20 +73,20 @@
         event.preventDefault();
         const offsetX = event.clientX - image.getBoundingClientRect().left;
         const offsetY = event.clientY - image.getBoundingClientRect().top;
-      
+
         function dragMove(moveEvent) {
           image.style.left = moveEvent.clientX - offsetX + 'px';
           image.style.top = moveEvent.clientY - offsetY + 'px';
         }
-      
+
         function dragEnd() {
           document.removeEventListener('mousemove', dragMove);
           document.removeEventListener('mouseup', dragEnd);
         }
-      
+
         document.addEventListener('mousemove', dragMove);
         document.addEventListener('mouseup', dragEnd);
-      
+
         // Add touch event listeners for mobile devices
         image.addEventListener('touchmove', (e) => {
           e.preventDefault();
@@ -101,12 +94,13 @@
           image.style.left = touch.clientX - offsetX + 'px';
           image.style.top = touch.clientY - offsetY + 'px';
         });
-      
+
         image.addEventListener('touchend', () => {
           document.removeEventListener('touchmove', dragMove);
           document.removeEventListener('touchend', dragEnd);
         });
       }
+    });
   </script>
 </body>
 
