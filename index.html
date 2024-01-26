@@ -87,17 +87,25 @@
         document.addEventListener('mousemove', dragMove);
         document.addEventListener('mouseup', dragEnd);
 
-        // Add touch event listeners for mobile devices
-        image.addEventListener('touchmove', (e) => {
-          e.preventDefault();
-          const touch = e.touches[0];
-          image.style.left = touch.clientX - offsetX + 'px';
-          image.style.top = touch.clientY - offsetY + 'px';
-        });
+        // Use touchstart to initiate touch drag
+        image.addEventListener('touchstart', (touchStartEvent) => {
+          const touch = touchStartEvent.touches[0];
+          offsetX = touch.clientX - image.getBoundingClientRect().left;
+          offsetY = touch.clientY - image.getBoundingClientRect().top;
 
-        image.addEventListener('touchend', () => {
-          document.removeEventListener('touchmove', dragMove);
-          document.removeEventListener('touchend', dragEnd);
+          function touchMove(touchMoveEvent) {
+            const touch = touchMoveEvent.touches[0];
+            image.style.left = touch.clientX - offsetX + 'px';
+            image.style.top = touch.clientY - offsetY + 'px';
+          }
+
+          function touchEnd() {
+            document.removeEventListener('touchmove', touchMove);
+            document.removeEventListener('touchend', touchEnd);
+          }
+
+          document.addEventListener('touchmove', touchMove);
+          document.addEventListener('touchend', touchEnd);
         });
       }
     });
