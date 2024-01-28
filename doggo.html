@@ -103,7 +103,7 @@
         };
 
         function spawnXRandomImage(x = 10){
-            for (let i = 0; i < n; i++) {
+            for (let i = 0; i < x; i++) {
                 spawnRandomImage();
             }
         };
@@ -192,7 +192,7 @@
 
             h1.addEventListener('mouseup', () => {
                 clearTimeout(longPressTimeout);
-                spawnRandomImage();
+                spawnXRandomImage(10);
             });
             h1.addEventListener('touchstart', (event) => {
                 event.preventDefault(); // Prevent default touch behavior
