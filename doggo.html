@@ -102,6 +102,12 @@
             });
         };
 
+        function spawnXRandomImage(x = 10){
+            for (let i = 0; i < n; i++) {
+                spawnRandomImage();
+            }
+        };
+
         const spawnRandomImage = () => {
             const randomImage = new Image();
             const imageSize = Math.floor(Math.random() * 100) + 100;
@@ -197,7 +203,7 @@
 
 h1.addEventListener('touchend', () => {
     clearTimeout(longPressTimeout);
-    spawnRandomImage();
+    spawnXRandomImage(10);
 });
 
             function openSettingsMenu() {
