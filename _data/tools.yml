@@ -1,0 +1,9 @@
+- name: Constrain Pictures
+  link: /tools/constrain-pic.html
+  desc: To adjust the picture size and format.<br><small>Made for Uncle Ji ❤️</small>
+  icon: /assets/images/img.png
+  
+- name: "PowerPoint(old): Video"
+  link: /tools/vid-for-old-ppt.html
+  desc: To make videos compatible with older PowerPoint versions.<br><small>Made for Auntie Ji ❤️</small>
+  icon: /assets/images/ppt.png

@@ -1,0 +1,15 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;1,500&display=swap');
+
+
+body {
+  background: linear-gradient(to bottom, #022930, #000000);
+  color: white;
+  font-family: 'Source Code Pro', monospace; 
+  height: 100vh;
+  transition: color 0.1s ease-in-out;
+  text-align: center;
+}
+

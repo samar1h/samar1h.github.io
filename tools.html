@@ -1,0 +1,17 @@
+---
+title: Tools
+layout: default
+icon: /assets/images/favicon-light.ico
+---
+
+<div style="margin: 4%;">
+    {% for item in site.data.tools %}
+        <div style="display: flex; height: 200px; border: 1px solid white; margin: 2%;">
+            <img style="width: height; border: 1px solid white;margin: 2%;border-radius: 50%;" alt=":-)" src="{{ item.icon }}"/>
+            <div style="width: 100%;text-align: left;margin: 2%;">
+                <a href="{{ item.link }}" style="text-decoration: none;"><H2>{{ item.name }}</H2></a>
+                {{ item.desc }}
+            </div>
+        </div>
+    {% endfor %}
+</div>

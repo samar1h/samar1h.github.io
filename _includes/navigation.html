@@ -1,7 +1,11 @@
-<nav>
-    {% for item in site.data.navigation %}
-      <a href="{{ item.link }}" {% if page.url == item.link %}style="color: red;"{% endif %}>
-        {{ item.name }}
-      </a>
+<hr>
+<header>
+  <nav style="text-align:left; margin-left:0%; margin-right:2%;">
+      {% for item in site.data.navigation %}
+        |<a href="{{ item.link }}" style="color:{% if page.url == item.link %}green{% else %}white{% endif %};text-decoration: none;">
+          {{item.name}}
+        </a>|
     {% endfor %}
   </nav>
+</header>
+<hr>
